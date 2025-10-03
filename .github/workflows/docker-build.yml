@@ -1,0 +1,26 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main   # Run this workflow when you push to main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest   # GitHub will use a Linux VM
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3   # Gets your repo code (Dockerfile, etc.)
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: saadimm/spark:4.0.0-aws
